@@ -25,3 +25,4 @@ int main(int argc, char **argv)
 ```
 
 ## Target Exploits
+Pada level ini kita ditargetkan untuk mengubah variabel **modified** menjadi tidak sama dengan 0. Pada program diatas, input kita disimpan pada kedalam buffer menggunakan fungsi gets(). Karena gets() bukanlah fungsi yang aman, kita dapat menggunakannya untuk menimpa memori dimana variabel **modified** disimpan.
