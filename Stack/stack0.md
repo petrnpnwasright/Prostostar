@@ -31,7 +31,7 @@ Pada level ini kita ditargetkan untuk mengubah variabel **modified** menjadi tid
 Seperti yang dikatakan sebelumnya **gets()** adalah fungsi yang tidak aman. Jika kita melihat pada man pages gets() dengan mengetikkan *man gets* pada bagian BUGS disebutkan bahwa gets() rentan karena tidak mungkin untuk mengetahui berapa banyak karakter yang akan diterima oleh gets(). fungsi ini akan terus menyimpan karakter setelah akhir buffer.
 
 ## Lets Dive Deeper
-**[!] Disclaimer** saya disini memindahkannya dari Protostar machine kedalam local maschine saya, agar lebih mudah untuk menganalisis programnya. Disini saya juga menggunakan ekstensi dari GDB yaitu gef.
+**[!] Disclaimer** saya disini memindahkannya dari Protostar machine kedalam local maschine saya, agar lebih mudah untuk menganalisis programnya. Disini saya juga menggunakan ekstensi dari GDB yaitu gef. Jadi alamat pada machine anda mungkin berbeda
 
 Pertama tama kita coba liat bagaimana kodenya terlihat di assembly menggunakan command berikut
 > **gdb -q stack0** </br>
@@ -70,3 +70,16 @@ Namun jika kita melihat sedikit keatas, kita dapat melihat pada alamat **0x08048
 gef➤  x/wx $esp+0x5c
 0xffffcdec:	0x00000000
 ```
+
+Terlihat bahwa nilai dari alamat itu adalah 0. Kita diperintahkan untuk mengubah nilainya agar != 0 bukan? </br>
+**Bagaimana Caranya??** </br>
+Coba kita lihat kembali pada functions main, apa yang ia lakukan. Terdapat pada alamat **0x08048405** dimana nilai dari **esp+0x1c** dimasukkan kedalam eax juga. Apakah anda mengerti apa yang ia coba lakukan? :v. Coba kita lihat apa isi alamat itu
+
+> gef➤  x/wx $esp+0x1c
+
+```
+gef➤  x/wx $esp+0x1c
+0xffffcdac:	0x41414141
+```
+
+
