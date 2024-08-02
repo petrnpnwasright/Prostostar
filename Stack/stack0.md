@@ -57,3 +57,8 @@ Pertama tama kita coba liat bagaimana kodenya terlihat di assembly menggunakan c
    0x08048434 <+64>:	ret
 
 ```
+
+Kita dapat melihat pada alamat **0x08048415** terdapat fungsi yang membandingkan nilai dari eax dengan eax. Membingungkan bukan? </br>
+Namun jika kita melihat sedikit keatas, kita dapat melihat pada alamat **0x08048411** bahwa nilai dari alamat **esp+0x5c** dimasukkan kedalam eax. Coba kita lihat di dalam gdb apa nilai dari alamat **esp+0x5c** tersebut dengan meletakkan breakpoint pada **0x08048415**
+
+> b *0x08048415
