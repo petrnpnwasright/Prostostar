@@ -62,4 +62,5 @@ Kita dapat melihat pada alamat **0x08048415** terdapat fungsi yang membandingkan
 Namun jika kita melihat sedikit keatas, kita dapat melihat pada alamat **0x08048411** bahwa nilai dari alamat **esp+0x5c** dimasukkan kedalam eax. Coba kita lihat di dalam gdb apa nilai dari alamat **esp+0x5c** tersebut dengan meletakkan breakpoint pada **0x08048415**
 
 > b *0x08048415 </br>
-> run
+> run </br>
+> AAAA
