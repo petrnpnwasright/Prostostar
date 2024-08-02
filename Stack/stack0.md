@@ -112,9 +112,9 @@ you have changed the 'modified' variable
 Nah.. Sekarang coba kita lihat apa yang terjadi di GDB
 
 ```
-b *0x08048415 </br>
-run </br>
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB </br>
+b *0x08048415 
+run 
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB
 x/wx $esp+0x5c
 0xffffcdec:	0x00000042
 x/wx $esp+0x1c
