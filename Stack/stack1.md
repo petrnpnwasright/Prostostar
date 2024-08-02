@@ -142,7 +142,7 @@ Try again, you got 0x64636261
 Ha? mengapa kita mendapatkan **0x64636261** bukan **0x61626364**?. Itu terjadi karena litle endian.
 
 ### Litle Endian
-> Little-endian Menyimpan byte paling tidak signifikan (yang disebut “ujung paling kecil”) terlebih dahulu. Ini berarti bahwa byte pertama (pada alamat memori terendah) adalah yang terkecil, yang paling masuk akal bagi orang yang membaca dari kanan ke kiri
+> Little-endian Menyimpan byte paling tidak signifikan (yang disebut “ujung paling kecil”) terlebih dahulu. Ini berarti bahwa byte pertama (pada alamat memori terendah) adalah yang terkecil, yang paling masuk akal bagi orang, yaitu membaca dari kanan ke kiri
 
 Sekarang kita sudah mengetahui apa itu litle endian, mari kita coba sekali lagi dengan membaliknya menjadi **dcba** untuk mengalahkan level ini!
 ```
