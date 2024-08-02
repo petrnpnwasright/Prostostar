@@ -34,7 +34,7 @@ Seperti yang dikatakan sebelumnya **gets()** adalah fungsi yang tidak aman. Jika
 **[!] Disclaimer** saya disini memindahkannya dari Protostar machine kedalam local maschine saya, agar lebih mudah untuk menganalisis programnya. Disini saya juga menggunakan ekstensi dari GDB yaitu gef.
 
 Pertama tama kita coba liat bagaimana kodenya terlihat di assembly menggunakan command berikut
-> **gdb -q stack0**
+> **gdb -q stack0** </br>
 > **disass main**
 ```
    0x080483f4 <+0>:	push   ebp
