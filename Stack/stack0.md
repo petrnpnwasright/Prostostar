@@ -31,8 +31,10 @@ Pada level ini kita ditargetkan untuk mengubah variabel **modified** menjadi tid
 Seperti yang dikatakan sebelumnya **gets()** adalah fungsi yang tidak aman. Jika kita melihat pada man pages gets() dengan mengetikkan *man gets* pada bagian BUGS disebutkan bahwa gets() rentan karena tidak mungkin untuk mengetahui berapa banyak karakter yang akan diterima oleh gets(). fungsi ini akan terus menyimpan karakter setelah akhir buffer.
 
 ## Lets Dive Deeper
-**[!] Disclaimer** saya disini memindahkannya dari Protostar machine kedalam local maschine saya, agar lebih mudah untuk menganalisis programnya. Disini saya juga menggunakan ekstensi dari GDB yaitu gef
+**[!] Disclaimer** saya disini memindahkannya dari Protostar machine kedalam local maschine saya, agar lebih mudah untuk menganalisis programnya. Disini saya juga menggunakan ekstensi dari GDB yaitu gef.
 
+Pertama tama kita coba liat bagaimana kodenya terlihat di assembly menggunakan command berikut
+disass main
 ```
    0x080483f4 <+0>:	push   ebp
    0x080483f5 <+1>:	mov    ebp,esp
