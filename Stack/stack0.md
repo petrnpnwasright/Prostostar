@@ -63,4 +63,10 @@ Namun jika kita melihat sedikit keatas, kita dapat melihat pada alamat **0x08048
 
 > b *0x08048415 </br>
 > run </br>
-> AAAA
+> AAAA </br>
+> x/wx $esp+0x5c
+
+```
+gef➤  x/wx $esp+0x5c
+0xffffcdec:	0x00000000
+```
