@@ -78,6 +78,7 @@ Dapat kita lihat bahwa di alamat **0x080484a2** terdapat fungsi strcpy() yang me
 
 Kita dapat meletakkan breakpoint pada alamat **0x080484ab** untuk melihat nilainya
 > b *0x080484ab </br>
+> r </br>
 > x/wx $esp+0x5c  </br>
 > x/wx $eax  </br>
 
